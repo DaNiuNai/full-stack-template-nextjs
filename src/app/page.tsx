@@ -1,36 +1,14 @@
-"use client";
-import { api } from "@/lib/trpc/client";
-import { authClient } from "@/lib/better-auth/client";
-import { useRouter } from "next/navigation";
-import { useEffect, useRef } from "react";
+import { auth } from "@/lib/better-auth";
 import Link from "next/link";
+import { headers } from "next/headers";
+import { UserMenu } from "@/components/user-menu";
 
-export default function Root() {
-  const router = useRouter();
-  const meQuery = api.user.getInfo.useQuery(undefined, {
-    enabled: false,
-    retry: false,
+export default async function Root() {
+  // 获取当前请求的 session
+  const session = await auth.api.getSession({
+    headers: await headers(),
   });
-  const loginStatus = api.user.isLogged.useQuery(undefined, {
-    enabled: false,
-    retry: false,
-  });
-  const loginStatusRef = useRef(loginStatus);
-
-  useEffect(() => {
-    loginStatusRef.current.refetch();
-  }, []);
-
-  const handleLogout = () => {
-    authClient.signOut();
-    router.push("/login");
-  };
-
-  const handleGetInfo = async () => {
-    const result = await meQuery.refetch();
-    console.log(result.data);
-  };
-
+  const isLoggedIn = !!session?.user;
   return (
     <main className="acid-container">
       <h1 className="acid-title">
@@ -39,14 +17,9 @@ export default function Root() {
         Template
       </h1>
       <p className="acid-subtitle">{"// 好奇心是指南针 //"}</p>
-      {loginStatus.data?.status ? (
+      {isLoggedIn ? (
         <div className="btn-group">
-          <button onClick={handleGetInfo} className="acid-btn">
-            查询
-          </button>
-          <button onClick={handleLogout} className="acid-btn secondary">
-            登出
-          </button>
+          <UserMenu />
         </div>
       ) : (
         <div className="btn-group">
