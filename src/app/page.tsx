@@ -32,6 +32,14 @@ export default async function Root() {
           </Link>
         </div>
       )}
+      <div className="btn-group" style={{ marginTop: "2rem" }}>
+        <Link href="/trpc-ssr" className="acid-btn secondary">
+          tRPC SSR 演示
+        </Link>
+        <Link href="/trpc-client" className="acid-btn">
+          tRPC Client 演示
+        </Link>
+      </div>
     </main>
   );
 }
