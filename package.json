@@ -6,7 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "db:push": "prisma db push",
+    "db:generate": "prisma generate",
+    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+    "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.4.2",
@@ -34,6 +38,8 @@
     "@types/react-dom": "^19",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "prettier": "^3.8.1",
+    "prettier-plugin-tailwindcss": "^0.7.2",
     "prisma": "^7.4.2",
     "tailwindcss": "^4",
     "typescript": "^5"
