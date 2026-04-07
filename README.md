@@ -50,10 +50,10 @@ BETTER_AUTH_URL="http://localhost:3000"
 
 ```bash
 # 使用 openssl (Linux/Mac)
-openssl rand -base64 32
+cat /dev/urandom | tr -dc 'A-Za-z0-9' | head -c 64; echo
 
 # 使用 PowerShell (Windows)
-[System.Security.Cryptography.RandomNumberGenerator]::GetBytes(32) | ForEach-Object { $_.ToString("x2") }
+-join ((65..90) + (97..122) + (48..57) | Get-Random -Count 64 | ForEach-Object {[char]$_})
 ```
 
 ### 4. 初始化数据库
