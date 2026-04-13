@@ -10,35 +10,22 @@ export default async function Root() {
   });
   const isLoggedIn = !!session?.user;
   return (
-    <main className="acid-container">
-      <h1 className="acid-title">
-        NextJS
-        <br />
-        Template
-      </h1>
-      <p className="acid-subtitle">{"// 好奇心是指南针 //"}</p>
+    <main>
+      <h1>NextJS Template</h1>
       {isLoggedIn ? (
-        <div className="btn-group">
+        <div>
           <UserMenu />
         </div>
       ) : (
-        <div className="btn-group">
+        <div>
           {/* Next.js 内置路由组件 */}
-          <Link href="/login" className="acid-btn">
-            登录
-          </Link>
-          <Link href="/register" className="acid-btn secondary">
-            注册
-          </Link>
+          <Link href="/login">登录</Link>
+          <Link href="/register">注册</Link>
         </div>
       )}
-      <div className="btn-group" style={{ marginTop: "2rem" }}>
-        <Link href="/trpc-ssr" className="acid-btn secondary">
-          tRPC SSR 演示
-        </Link>
-        <Link href="/trpc-client" className="acid-btn">
-          tRPC Client 演示
-        </Link>
+      <div>
+        <Link href="/trpc-ssr">tRPC SSR 演示</Link>
+        <Link href="/trpc-client">tRPC Client 演示</Link>
       </div>
     </main>
   );

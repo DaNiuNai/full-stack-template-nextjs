@@ -26,57 +26,36 @@ export default function Register() {
     }
   };
   return (
-    <main className="acid-container">
-      <div
-        className="acid-card"
-        style={{ boxShadow: "8px 8px 0px var(--acid-blue)" }}
-      >
-        <h2 className="form-title" style={{ color: "var(--acid-pink)" }}>
-          注册
-        </h2>
+    <main>
+      <div>
+        <h2>注册</h2>
 
-        <form className="acid-form" onSubmit={handleRegister}>
+        <form onSubmit={handleRegister}>
           <input
             type="text"
             placeholder="用户名 //"
-            className="acid-input"
             onChange={(e) => setName(e.target.value)}
             required
           />
           <input
             type="email"
             placeholder="邮箱 //"
-            className="acid-input"
             onChange={(e) => setEmail(e.target.value)}
             required
           />
           <input
             type="password"
             placeholder="密码 //"
-            className="acid-input"
             onChange={(e) => setPassword(e.target.value)}
             required
           />
 
           {/* 使用次要配色按钮保持视觉差异 */}
-          <button
-            type="submit"
-            className="acid-btn secondary"
-            style={{ width: "100%", marginTop: "1rem" }}
-          >
-            创建账号
-          </button>
+          <button type="submit">创建账号</button>
         </form>
 
-        <div
-          style={{ marginTop: "2rem", textAlign: "center", fontSize: "0.9rem" }}
-        >
-          <Link
-            href="/"
-            style={{ color: "var(--acid-green)", textDecoration: "none" }}
-          >
-            &lt;&lt; 返回主页
-          </Link>
+        <div>
+          <Link href="/">&lt;&lt; 返回主页</Link>
         </div>
       </div>
     </main>

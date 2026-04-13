@@ -23,12 +23,8 @@ export function UserMenu() {
 
   return (
     <>
-      <button onClick={handleGetInfo} className="acid-btn">
-        查询
-      </button>
-      <button onClick={handleLogout} className="acid-btn secondary">
-        登出
-      </button>
+      <button onClick={handleGetInfo}>查询</button>
+      <button onClick={handleLogout}>登出</button>
     </>
   );
 }
