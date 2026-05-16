@@ -3,7 +3,7 @@ import Link from "next/link";
 import { headers } from "next/headers";
 import { UserMenu } from "@/components/user-menu";
 
-export default async function Root() {
+export default async function Home() {
   // 获取当前请求的 session
   const session = await auth.api.getSession({
     headers: await headers(),
