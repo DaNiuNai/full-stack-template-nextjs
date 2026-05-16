@@ -252,6 +252,8 @@ pnpm lint             # ESLint 检查
 添加Better Auth插件后需要执行:
 ```bash
 pnpm dlx auth generate --config src/lib/better-auth/config.ts
+pnpm db:push
+pnpm db:generate
 ```
 
 ### 添加新的 API 路由
