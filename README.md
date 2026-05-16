@@ -249,6 +249,11 @@ pnpm lint             # ESLint 检查
 2. 运行 `pnpm dlx prisma db push`
 3. 运行 `pnpm dlx prisma generate`
 
+添加Better Auth插件后需要执行:
+```bash
+pnpm dlx auth generate --config src/lib/better-auth/config.ts
+```
+
 ### 添加新的 API 路由
 
 1. 在 `src/server/api/routers/` 创建新文件
