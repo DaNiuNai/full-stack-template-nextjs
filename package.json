@@ -7,10 +7,10 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "typecheck": "tsc --noEmit",
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
-    "format:check": "prettier --check \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
-    "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache"
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.4.2",
