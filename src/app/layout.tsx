@@ -1,7 +1,6 @@
 import "@/style/globals.css";
 
 import type { Metadata } from "next";
-import { TRPCReactProvider } from "@/lib/trpc/client";
 
 export const metadata: Metadata = {
   title: "full-stack-template-nextjs",
@@ -16,9 +15,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="zh-CN">
-      <body>
-        <TRPCReactProvider>{children}</TRPCReactProvider>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }

@@ -1,15 +1,13 @@
 "use client";
 
-import { api } from "@/lib/trpc/client";
 import { authClient } from "@/lib/better-auth/client";
+import { fetchCurrentUser } from "@/lib/user-api-client";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export function UserMenu() {
   const router = useRouter();
-  const meQuery = api.user.getInfo.useQuery(undefined, {
-    enabled: false,
-    retry: false,
-  });
+  const [loading, setLoading] = useState(false);
 
   const handleLogout = () => {
     authClient.signOut();
@@ -17,13 +15,21 @@ export function UserMenu() {
   };
 
   const handleGetInfo = async () => {
-    const result = await meQuery.refetch();
-    console.log(result.data);
+    setLoading(true);
+    try {
+      console.log(await fetchCurrentUser());
+    } catch (error) {
+      console.error("查询用户信息失败", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
     <>
-      <button onClick={handleGetInfo}>查询</button>
+      <button onClick={handleGetInfo} disabled={loading}>
+        {loading ? "查询中..." : "查询"}
+      </button>
       <button onClick={handleLogout}>登出</button>
     </>
   );

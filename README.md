@@ -1,22 +1,20 @@
 # Full-Stack Template Next.js
 
-一个开箱即用的全栈 Next.js 项目模板，集成了 tRPC、Better Auth、Prisma 和 PostgreSQL。
+一个开箱即用的全栈 Next.js 项目模板，集成了 Next.js Route Handlers、Better Auth、Prisma 和 PostgreSQL。
 
 ## 技术栈
 
 | 技术        | 版本    | 说明              |
 | ----------- | ------- | ----------------- |
 | Next.js     | 16.1.6  | React 全栈框架    |
-| tRPC        | 11.11.0 | 类型安全的 API 层 |
 | Better Auth | 1.4.20  | 现代身份认证方案  |
 | Prisma      | 7.4.2   | TypeScript ORM    |
 | PostgreSQL  | -       | 关系型数据库      |
-| React Query | 5.90.21 | 服务端状态管理    |
 | Zod         | 4.3.6   | Schema 校验       |
 
 ## 功能特性
 
-- **类型安全的 API** - tRPC 提供端到端的类型安全
+- **Next.js 原生后端** - 使用 App Router Route Handlers 提供 GET / POST API
 - **SSR & CSR** - 支持服务端渲染和客户端渲染
 - **用户认证** - 内置登录、注册、会话管理
 - **数据库集成** - Prisma + PostgreSQL 完整配置
@@ -80,13 +78,13 @@ pnpm dev
 src/
 ├── app/                      # Next.js App Router
 │   ├── api/
-│   │   ├── auth/[...all]/  # Better Auth API 路由
-│   │   └── trpc/[trpc]/    # tRPC API 处理器
+│   │   ├── auth/[...all]/      # Better Auth API 路由
+│   │   └── user/               # 用户相关 Route Handlers
 │   ├── login/               # 登录页面
 │   ├── register/            # 注册页面
-│   ├── trpc-ssr/           # SSR 示例页面
-│   ├── trpc-client/        # CSR 示例页面
-│   ├── layout.tsx          # 根布局 (含 Providers)
+│   ├── next-api-ssr/        # SSR 示例页面
+│   ├── next-api-client/     # CSR 示例页面
+│   ├── layout.tsx          # 根布局
 │   └── page.tsx            # 首页
 ├── components/              # React 组件
 │   └── user-menu.tsx       # 用户菜单组件
@@ -96,96 +94,59 @@ src/
 │   │   ├── config.ts       # 认证配置
 │   │   ├── index.ts        # 认证实例
 │   │   └── server.ts       # 服务端会话辅助
-│   ├── trpc/              # tRPC 配置
-│   │   ├── client.tsx      # 客户端 Provider & Hooks
-│   │   ├── query-client.ts # React Query 配置
-│   │   ├── server.ts       # SSR 服务端调用
-│   │   └── trpc.ts         # tRPC 初始化
+│   ├── user-api-client.ts  # 客户端 fetch 封装
 │   └── db.ts              # Prisma 客户端
-├── server/
-│   └── api/
-│       ├── root.ts         # 路由入口
-│       └── routers/        # API 路由
-│           └── user.ts    # 用户相关 API
+├── service/
+│   ├── http.ts             # API 错误响应辅助
+│   └── user.ts             # 用户相关服务端逻辑
 └── style/
     └── globals.css         # 全局样式
 ```
 
-## tRPC 使用指南
+## Next.js 后端使用指南
 
 ### 客户端使用 (CSR)
 
-使用 `useQuery` 和 `useMutation` Hooks：
+客户端组件通过 `fetch` 调用 Route Handlers：
 
 ```tsx
-import { api } from "@/lib/trpc/client";
+import { fetchHello, updateCurrentUserName } from "@/lib/user-api-client";
 
-// 查询
-const { data } = api.user.hello.useQuery({ text: "world" });
+const data = await fetchHello("world");
 
-// 变更
-const mutation = api.user.updateName.useMutation();
-mutation.mutate({ name: "新名字" });
+await updateCurrentUserName("新名字");
 ```
 
 ### 服务端使用 (SSR)
 
-在 Server Components 中直接调用：
+Server Components 直接调用服务端函数：
 
 ```tsx
-import { api } from "@/lib/trpc/server";
+import { getHello } from "@/service/user";
 
-export default async function Page() {
-  const data = await api.user.hello({ text: "服务端" });
+export default function Page() {
+  const data = getHello("服务端");
   return <div>{data.greeting}</div>;
 }
 ```
 
 ### 路由定义
 
-在 `src/server/api/routers/` 中添加新的路由：
+在 `src/app/api/` 中添加 `route.ts` 文件，并导出 `GET` 或 `POST`：
 
 ```typescript
-// src/server/api/routers/example.ts
-import { z } from "zod";
-import {
-  createTRPCRouter,
-  publicProcedure,
-  protectedProcedure,
-} from "@/lib/trpc/trpc";
+// src/app/api/example/route.ts
+import { NextResponse } from "next/server";
 
-export const exampleRouter = createTRPCRouter({
-  // 公开接口
-  hello: publicProcedure
-    .input(z.object({ text: z.string() }))
-    .query(({ input }) => {
-      return { greeting: `你好 ${input.text}` };
-    }),
+export function GET() {
+  return NextResponse.json({ message: "hello" });
+}
 
-  // 需要登录的接口
-  getSecret: protectedProcedure.query(() => {
-    return "这是秘密信息";
-  }),
-});
+export async function POST(request: Request) {
+  const input = await request.json();
+  return NextResponse.json(input);
+}
 ```
-
-然后在 `src/server/api/root.ts` 中注册：
-
-```typescript
-import { exampleRouter } from "@/server/api/routers/example";
-
-export const appRouter = createTRPCRouter({
-  user: userRouter,
-  example: exampleRouter, // 添加新路由
-});
-```
-
-### Procedure 类型
-
-| 类型                 | 说明               | 使用场景               |
-| -------------------- | ------------------ | ---------------------- |
-| `publicProcedure`    | 公开接口，无需登录 | 公开数据、登录检查     |
-| `protectedProcedure` | 需要登录           | 用户专属数据、变更操作 |
 
 ## 认证功能
 
@@ -199,25 +160,32 @@ export const appRouter = createTRPCRouter({
 
 ### 受保护路由
 
-使用 `protectedProcedure` 确保只有登录用户才能访问：
+在 Route Handler 或服务端函数中读取 Better Auth session，确保只有登录用户才能访问：
 
 ```typescript
-const getUserData = protectedProcedure.query(async ({ ctx }) => {
-  // ctx.session 包含用户信息
-  return ctx.session.user;
-});
+import { auth } from "@/lib/better-auth";
+
+export async function GET(request: Request) {
+  const session = await auth.api.getSession({ headers: request.headers });
+
+  if (!session?.user) {
+    return Response.json({ error: "请先登录" }, { status: 401 });
+  }
+
+  return Response.json(session.user);
+}
 ```
 
 ## 可用 API
 
-| 端点                    | 类型     | 说明                      |
-| ----------------------- | -------- | ------------------------- |
-| `user.hello`            | query    | 测试接口，返回问候语      |
-| `user.isLogged`         | query    | 检查登录状态              |
-| `user.getById`          | query    | 根据 ID 获取用户          |
-| `user.getInfo`          | query    | 获取当前用户信息 (需登录) |
-| `user.getSecretMessage` | query    | 获取秘密信息 (需登录)     |
-| `user.updateName`       | mutation | 更新用户名 (需登录)       |
+| 端点 | 方法 | 说明 |
+| ---- | ---- | ---- |
+| `/api/user/hello?text=world` | GET | 测试接口，返回问候语 |
+| `/api/user/is-logged` | GET | 检查登录状态 |
+| `/api/user/by-id?id=<id>` | GET | 根据 ID 获取用户 |
+| `/api/user/me` | GET | 获取当前用户信息 (需登录) |
+| `/api/user/secret-message` | GET | 获取秘密信息 (需登录) |
+| `/api/user/update-name` | POST | 更新用户名 (需登录) |
 
 ## 命令
 
@@ -258,9 +226,9 @@ pnpm db:generate
 
 ### 添加新的 API 路由
 
-1. 在 `src/server/api/routers/` 创建新文件
-2. 定义 procedure
-3. 在 `src/server/api/root.ts` 注册
+1. 在 `src/service/` 中添加可复用的服务端函数
+2. 在 `src/app/api/` 下创建对应的 `route.ts`
+3. 导出 `GET` 或 `POST` 处理函数
 
 ### 添加新的页面
 

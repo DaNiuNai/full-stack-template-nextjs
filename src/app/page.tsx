@@ -24,8 +24,8 @@ export default async function Home() {
         </div>
       )}
       <div>
-        <Link href="/trpc-ssr">tRPC SSR 演示</Link>
-        <Link href="/trpc-client">tRPC Client 演示</Link>
+        <Link href="/next-api-ssr">Next.js SSR 演示</Link>
+        <Link href="/next-api-client">Next.js Client 演示</Link>
       </div>
     </main>
   );
