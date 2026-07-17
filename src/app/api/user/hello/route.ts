@@ -1,13 +1,10 @@
-import { type NextRequest, NextResponse } from "next/server";
+import { withApiError } from "@/lib/http/errors";
+import { searchParamsObject } from "@/lib/http/server";
+import { helloInput, userService } from "@/service/user";
 
-import { handleApiError } from "@/service/http";
-import { getHello } from "@/service/user";
-
-export function GET(request: NextRequest) {
-  try {
-    const text = request.nextUrl.searchParams.get("text") ?? "";
-    return NextResponse.json(getHello(text));
-  } catch (error) {
-    return handleApiError(error);
-  }
+export async function GET(request: Request) {
+  return withApiError(async () => {
+    const input = helloInput.parse(searchParamsObject(request));
+    return Response.json(await userService.getHello(input));
+  });
 }

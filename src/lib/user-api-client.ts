@@ -22,6 +22,25 @@ export type SecretMessageData = {
   message: string;
 };
 
+export class ApiClientError extends Error {
+  readonly code: string;
+  readonly status: number;
+  readonly issues?: unknown;
+
+  constructor(input: {
+    code: string;
+    message: string;
+    status: number;
+    issues?: unknown;
+  }) {
+    super(input.message);
+    this.name = "ApiClientError";
+    this.code = input.code;
+    this.status = input.status;
+    this.issues = input.issues;
+  }
+}
+
 export function fetchHello(text: string) {
   const params = new URLSearchParams({ text });
   return fetchJson<HelloData>(`/api/user/hello?${params}`);
@@ -57,15 +76,42 @@ async function fetchJson<T>(url: string, init?: RequestInit): Promise<T> {
   const data: unknown = await response.json().catch(() => null);
 
   if (!response.ok) {
-    const message =
-      data &&
-      typeof data === "object" &&
-      "error" in data &&
-      typeof data.error === "string"
-        ? data.error
-        : `请求失败 (${response.status})`;
-    throw new Error(message);
+    const error = getApiError(data, response.status);
+    throw new ApiClientError({ ...error, status: response.status });
   }
 
   return data as T;
+}
+
+function getApiError(data: unknown, status: number) {
+  const fallback = {
+    code: "UNKNOWN",
+    message: `请求失败 (${status})`,
+    issues: undefined,
+  };
+
+  if (!data || typeof data !== "object" || !("error" in data)) {
+    return fallback;
+  }
+
+  if (typeof data.error === "string") {
+    return { ...fallback, message: data.error };
+  }
+
+  if (!data.error || typeof data.error !== "object") {
+    return fallback;
+  }
+
+  const error = data.error as {
+    code?: unknown;
+    message?: unknown;
+    issues?: unknown;
+  };
+
+  return {
+    code: typeof error.code === "string" ? error.code : fallback.code,
+    message:
+      typeof error.message === "string" ? error.message : fallback.message,
+    issues: error.issues,
+  };
 }

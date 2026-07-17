@@ -1,33 +1,29 @@
 import Link from "next/link";
 import { headers } from "next/headers";
 
-import {
-  getCurrentUser,
-  getHello,
-  getLoginStatus,
-  getSecretMessage,
-  getUserById,
-} from "@/service/user";
+import { getApiContextFromHeaders } from "@/lib/http/server";
+import { userService } from "@/service/user";
 
 export default async function NextApiSSRPage() {
   const requestHeaders = await headers();
-  const helloData = getHello("服务端渲染");
-  const loginStatus = await getLoginStatus(requestHeaders);
+  const ctx = await getApiContextFromHeaders(requestHeaders);
+  const helloData = userService.getHello({ text: "服务端渲染" });
+  const loginStatus = await userService.getLoginStatus(ctx);
 
-  let userById: Awaited<ReturnType<typeof getUserById>> | null = null;
+  let userById: Awaited<ReturnType<typeof userService.getById>> | null = null;
   let userByIdError = false;
   try {
-    userById = await getUserById("example-id");
+    userById = await userService.getById(ctx, { id: "example-id" });
   } catch {
     userByIdError = true;
   }
 
   let secretMessage: string | null = null;
-  let userInfo: Awaited<ReturnType<typeof getCurrentUser>> | null = null;
+  let userInfo: Awaited<ReturnType<typeof userService.getInfo>> | null = null;
   if (loginStatus.status) {
     try {
-      secretMessage = await getSecretMessage(requestHeaders);
-      userInfo = await getCurrentUser(requestHeaders);
+      secretMessage = await userService.getSecretMessage(ctx);
+      userInfo = await userService.getInfo(ctx);
     } catch {
       // 登录状态变化时，受保护数据可能无法读取。
     }

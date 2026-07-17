@@ -1,12 +1,10 @@
-import { type NextRequest, NextResponse } from "next/server";
+import { withApiError } from "@/lib/http/errors";
+import { getApiContext } from "@/lib/http/server";
+import { userService } from "@/service/user";
 
-import { handleApiError } from "@/service/http";
-import { getCurrentUser } from "@/service/user";
-
-export async function GET(request: NextRequest) {
-  try {
-    return NextResponse.json(await getCurrentUser(request.headers));
-  } catch (error) {
-    return handleApiError(error);
-  }
+export async function GET(request: Request) {
+  return withApiError(async () => {
+    const ctx = await getApiContext(request);
+    return Response.json(await userService.getInfo(ctx));
+  });
 }

@@ -1,15 +1,11 @@
-import { type NextRequest, NextResponse } from "next/server";
+import { withApiError } from "@/lib/http/errors";
+import { getApiContext, readJsonObject } from "@/lib/http/server";
+import { updateNameInput, userService } from "@/service/user";
 
-import { handleApiError } from "@/service/http";
-import { updateCurrentUserName } from "@/service/user";
-
-export async function POST(request: NextRequest) {
-  try {
-    const input: unknown = await request.json().catch(() => null);
-    return NextResponse.json(
-      await updateCurrentUserName(request.headers, input),
-    );
-  } catch (error) {
-    return handleApiError(error);
-  }
+export async function POST(request: Request) {
+  return withApiError(async () => {
+    const ctx = await getApiContext(request);
+    const input = updateNameInput.parse(await readJsonObject(request));
+    return Response.json(await userService.updateName(ctx, input));
+  });
 }

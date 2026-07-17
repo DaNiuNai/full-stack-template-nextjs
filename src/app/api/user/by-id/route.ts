@@ -1,13 +1,11 @@
-import { type NextRequest, NextResponse } from "next/server";
+import { withApiError } from "@/lib/http/errors";
+import { getApiContext, searchParamsObject } from "@/lib/http/server";
+import { userByIdInput, userService } from "@/service/user";
 
-import { handleApiError } from "@/service/http";
-import { getUserById } from "@/service/user";
-
-export async function GET(request: NextRequest) {
-  try {
-    const id = request.nextUrl.searchParams.get("id") ?? "";
-    return NextResponse.json(await getUserById(id));
-  } catch (error) {
-    return handleApiError(error);
-  }
+export async function GET(request: Request) {
+  return withApiError(async () => {
+    const ctx = await getApiContext(request);
+    const input = userByIdInput.parse(searchParamsObject(request));
+    return Response.json(await userService.getById(ctx, input));
+  });
 }
