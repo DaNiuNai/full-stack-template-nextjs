@@ -5,7 +5,8 @@ import { db } from "@/lib/db";
 
 export const auth = betterAuth({
   database: prismaAdapter(db, {
-    provider: "postgresql", // 或 "sqlite" 或 "mysql"
+    provider: "sqlite",
+    // provider: "postgresql",
   }),
   emailAndPassword: {
     enabled: true,

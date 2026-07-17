@@ -1,6 +1,6 @@
 # Full-Stack Template Next.js
 
-一个开箱即用的全栈 Next.js 项目模板，集成了 Next.js Route Handlers、Better Auth、Prisma 和 PostgreSQL。
+一个开箱即用的全栈 Next.js 项目模板，集成了 Next.js Route Handlers、Better Auth、Prisma 和 SQLite。
 
 ## 技术栈
 
@@ -9,7 +9,7 @@
 | Next.js     | 16.1.6 | React 全栈框架   |
 | Better Auth | 1.4.20 | 现代身份认证方案 |
 | Prisma      | 7.4.2  | TypeScript ORM   |
-| PostgreSQL  | -      | 关系型数据库     |
+| SQLite      | -      | 关系型数据库     |
 | Zod         | 4.3.6  | Schema 校验      |
 
 ## 功能特性
@@ -18,7 +18,7 @@
 - **清晰的 API 分层** - Route Handler 负责协议适配，Service 负责业务逻辑，`lib/http` 提供统一 HTTP 基础设施
 - **SSR & CSR** - 支持服务端渲染和客户端渲染
 - **用户认证** - 内置登录、注册、会话管理
-- **数据库集成** - Prisma + PostgreSQL 完整配置
+- **数据库集成** - Prisma + SQLite 完整配置
 
 ## 快速开始
 
@@ -40,7 +40,8 @@ pnpm install
 复制 `.env.example` 为 `.env` 并配置：
 
 ```env
-DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
+DATABASE_URL="file:./dev.db"
+# DATABASE_URL="postgresql://user:password@localhost:5432/dbname"
 BETTER_AUTH_SECRET="your-secret-key"
 BETTER_AUTH_URL="http://localhost:3000"
 ```
@@ -59,10 +60,10 @@ cat /dev/urandom | tr -dc 'A-Za-z0-9' | head -c 64; echo
 
 ```bash
 # 推送 schema 到数据库
-pnpm dlx prisma db push
+pnpm db:push
 
 # 生成 Prisma Client
-pnpm dlx prisma generate
+pnpm db:generate
 ```
 
 ### 5. 启动开发服务器
@@ -240,7 +241,7 @@ pnpm lint             # ESLint 检查
 
 | 变量                 | 必填 | 说明                          |
 | -------------------- | ---- | ----------------------------- |
-| `DATABASE_URL`       | 是   | PostgreSQL 连接字符串         |
+| `DATABASE_URL`       | 是   | SQLite 数据库文件地址         |
 | `BETTER_AUTH_SECRET` | 是   | 认证密钥 (32位随机字符串)     |
 | `BETTER_AUTH_URL`    | 是   | 应用 URL (生产环境需要 HTTPS) |
 
@@ -249,8 +250,8 @@ pnpm lint             # ESLint 检查
 ### 添加新的数据模型
 
 1. 编辑 `prisma/schema.prisma`
-2. 运行 `pnpm dlx prisma db push`
-3. 运行 `pnpm dlx prisma generate`
+2. 运行 `pnpm db:push`
+3. 运行 `pnpm db:generate`
 
 添加Better Auth插件后需要执行:
 

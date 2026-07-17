@@ -43,3 +43,5 @@ next-env.d.ts
 /generated/prisma
 CLAUDE.md
 /generated/prisma
+*.db
+*.db-*
