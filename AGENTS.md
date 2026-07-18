@@ -2,13 +2,15 @@
 
 ## 项目结构与模块组织
 
-这是一个 Next.js 16 App Router 应用。
-页面和路由处理程序位于 `src/app/` 中；
-API 端点位于 `src/app/api/` 下。
-可复用的 UI 组件放在 `src/components/` 中，业务逻辑和 Zod schema 放在 `src/service/` 中，共享基础设施放在 `src/lib/` 中。
-全局样式位于 `src/styles/`，静态文件位于 `public/`，Prisma schema 文件为 `prisma/schema.prisma`。
+- 框架：Next.js 16（App Router）、React 19、TypeScript 5（严格）。
 
-保持后端流程`路由 -> 服务 -> lib/http`：路由处理程序适配 HTTP 输入/输出，服务层负责可复用的业务规则，HTTP 辅助工具提供上下文、身份验证、解析和错误响应。
+- `src/app/` 页面和路由处理程序
+- `src/app/api/*` api路由端点 → `src/service/*` 业务逻辑
+- `src/lib/*` 共享基础设施
+- `src/components/` 可复用的 UI 组件放在
+- `src/styles/`全局样式位于
+- `public/` 静态文件
+- `prisma/schema.prisma` Prisma schema 文件
 
 ## 构建、测试和开发命令
 
@@ -29,7 +31,7 @@ API 端点位于 `src/app/api/` 下。
 
 ## 编码风格与命名规范
 
-遵循 Prettier 默认配置
+Prettier 是权威标准：使用两空格缩进、双引号、分号和尾随逗号。
 使用严格的类型检查来编写 TypeScript 和 React。使用 `@/` 别名从 `src/` 导入。
 遵循现有模块风格：ESM 导入、函数式 React 组件、组件文件位于 `src/` 目录下。
 定义普通组件的文件名使用 PascalCase 命名，例如 `Navbar.tsx`。
@@ -38,9 +40,12 @@ Next.js 特殊文件命名按照官方约定。
 
 ## 测试指南
 
-通过 `pnpm lint`、`pnpm typecheck` 和相应的 `pnpm build`、`pnpm --filter test` 来验证更改。添加测试时，将测试文件放置在所覆盖代码附近或包级别的测试目录中，并使用如 `ComponentName.test.tsx` 或 `utils.test.ts` 的命名方式。
+通过 `pnpm lint`、`pnpm typecheck` 和相应的 `pnpm build`、`pnpm test` 来验证更改。
+添加测试时，将测试文件放置在所覆盖代码附近或包级别的测试目录中，并使用如 `ComponentName.test.tsx` 或 `utils.test.ts` 的命名方式。
+将集成测试命名为 `*.integration.test.ts`。
+为业务规则添加针对性的单元测试，为数据库工作流添加集成测试。
 
-## 开发指导
+## Agent说明
 
 运行`pnpm`之类的命令需要在沙箱外运行（此条规则仅Codex需要遵守）
 
