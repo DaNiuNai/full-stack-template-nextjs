@@ -37,6 +37,7 @@ Prettier 是权威标准：使用两空格缩进、双引号、分号和尾随�
 定义普通组件的文件名使用 PascalCase 命名，例如 `Navbar.tsx`。
 文件夹用 kebab-case 命名，例如 `src/app/api/user-profile`。
 Next.js 特殊文件命名按照官方约定。
+Next.js 应用的API端点只使用GET和POST方法，禁止使用其他方法
 
 ## 测试指南
 
