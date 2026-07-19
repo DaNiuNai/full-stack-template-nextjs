@@ -4,6 +4,8 @@ import { promisify } from "node:util";
 
 import { Client } from "pg";
 
+import { testEnv } from "@/env";
+
 const execFileAsync = promisify(execFile);
 const temporaryDatabaseMarker = "_vitest_";
 
@@ -41,7 +43,7 @@ async function dropDatabase(connectionString: string, databaseName: string) {
 }
 
 export default async function setup() {
-  const testDatabaseUrl = process.env.TEST_DATABASE_URL;
+  const testDatabaseUrl = testEnv.TEST_DATABASE_URL;
   if (!testDatabaseUrl) {
     throw new Error(
       "运行集成测试前必须设置 TEST_DATABASE_URL（它应指向具有创建数据库权限的 PostgreSQL 实例）",
