@@ -46,6 +46,10 @@ Next.js 应用的API端点只使用GET和POST方法，禁止使用其他方法
 将集成测试命名为 `*.integration.test.ts`。
 为业务规则添加针对性的单元测试，为数据库工作流添加集成测试。
 
+## 其他
+
+Prisma生成在./generated/prisma中，使用@generated导入
+
 ## Agent说明
 
 运行`pnpm`之类的命令需要在沙箱外运行（此条规则仅Codex需要遵守）
