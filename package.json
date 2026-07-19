@@ -10,10 +10,10 @@
     "typecheck": "tsc --noEmit",
     "db:push": "prisma db push",
     "db:generate": "prisma generate",
-    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache"
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",
+    "test": "vitest run"
   },
   "dependencies": {
-    "@prisma/adapter-better-sqlite3": "^7.4.2",
     "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "^7.4.2",
     "better-auth": "^1.4.20",
