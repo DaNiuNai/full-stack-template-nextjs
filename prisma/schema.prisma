@@ -6,6 +6,7 @@ generator client {
 datasource db {
   provider = "postgresql"
 }
+// 这是 BetterAuth 的默认数据模型,，严禁修改这些模型，否则可能导致程序无法正常运行。
 
 model User {
   id            String    @id
@@ -69,3 +70,5 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
+
+//从这里开始添加的模型
