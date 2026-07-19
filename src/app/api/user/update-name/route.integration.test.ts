@@ -5,7 +5,7 @@ import {
   type RouteHandler,
   signUpTestUser,
   type TestUser,
-} from "../../../../../tests/helpers/api";
+} from "@tests/helpers/api";
 
 let db: PrismaClient;
 let post: RouteHandler;

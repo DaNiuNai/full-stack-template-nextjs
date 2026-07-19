@@ -3,7 +3,7 @@ import {
   type RouteHandler,
   signUpTestUser,
   type TestUser,
-} from "../../../../../tests/helpers/api";
+} from "@tests/helpers/api";
 
 let get: RouteHandler;
 let user: TestUser;

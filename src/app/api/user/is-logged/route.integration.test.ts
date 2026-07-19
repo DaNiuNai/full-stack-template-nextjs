@@ -2,7 +2,7 @@ import {
   createApiRequest,
   type RouteHandler,
   signUpTestUser,
-} from "../../../../../tests/helpers/api";
+} from "@tests/helpers/api";
 
 let get: RouteHandler;
 let cookie: string;

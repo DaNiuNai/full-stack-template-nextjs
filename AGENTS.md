@@ -45,6 +45,7 @@ Next.js 应用的API端点只使用GET和POST方法，禁止使用其他方法
 添加测试时，将测试文件放置在所覆盖代码附近或包级别的测试目录中，并使用如 `ComponentName.test.tsx` 或 `utils.test.ts` 的命名方式。
 将集成测试命名为 `*.integration.test.ts`。
 为业务规则添加针对性的单元测试，为数据库工作流添加集成测试。
+从 `tests/` 导入共享测试辅助模块时使用 `@tests/*` 别名，避免深层相对路径。
 
 ## 其他
 

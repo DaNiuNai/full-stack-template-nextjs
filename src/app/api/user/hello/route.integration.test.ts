@@ -1,7 +1,4 @@
-import {
-  createApiRequest,
-  type RouteHandler,
-} from "../../../../../tests/helpers/api";
+import { createApiRequest, type RouteHandler } from "@tests/helpers/api";
 
 let get: RouteHandler;
 
