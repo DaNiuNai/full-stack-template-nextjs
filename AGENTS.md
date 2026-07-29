@@ -40,7 +40,7 @@
 
 ## 提交与 Pull Request
 
-提交标题遵循 Conventional Commits，使用祈使语气和可选作用域，不相关的更改应分开提交。PR 应说明目的、实现方式和验证命令；UI 更改附截图，并明确标注 schema 或环境变量变更。
+提交标题遵循中文 Conventional Commits，使用祈使语气和可选作用域，不相关的更改应分开提交。PR 应说明目的、实现方式和验证命令；UI 更改附截图，并明确标注 schema 或环境变量变更。
 
 ## Agent 约束
 
